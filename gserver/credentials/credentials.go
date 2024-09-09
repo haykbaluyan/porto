@@ -193,14 +193,17 @@ func (rc *perRPCCredential) GetRequestMetadata(ctx context.Context, _ ...string)
 			)
 			return nil, nil
 		}
-	} /*else if token.Expires != nil {
-		logger.ContextKV(ctx, xlog.DEBUG,
+	} else if token.Expires != nil {
+		/* this might be too frequent but we are trying to debug
+		token expiration issue we see once in a while, We should disable
+		this once debugging is done. */
+		logger.ContextKV(ctx, xlog.INFO,
 			"status", "existing_token",
 			"now", TimeISO8601(time.Now().UTC()),
 			"expires", TimeISO8601(*token.Expires),
 			"expires_in", time.Until(*token.Expires).String(),
 		)
-	}*/
+	}
 
 	ri, _ := grpccredentials.RequestInfoFromContext(ctx)
 	// if err := grpccredentials.CheckSecurityLevel(ri.AuthInfo, grpccredentials.PrivacyAndIntegrity); err != nil {
